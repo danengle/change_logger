@@ -1,4 +1,6 @@
-1290731376
+1290734469
+ACTIONS	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	    ACTIONS =
+ACTIONS	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	    ACTIONS =
 ActsAsChangeLogger	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	  module ActsAsChangeLogger
 ActsAsChangeLogger	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	  module ActsAsChangeLogger
 ChangeLogger	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger.rb	module ChangeLogger
@@ -11,39 +13,29 @@ ChangeLoggerGenerator	/home/dan/workspace/rails3/gems/change_logger/pkg/change_l
 ClassMethods	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	    module ClassMethods
 ClassMethods	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	    module ClassMethods
 CreateChangeLogs	/home/dan/workspace/rails3/gems/change_logger/lib/generators/templates/create_change_logs.rb	class CreateChangeLogs 
-InstanceMethods	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	    module InstanceMethods
-InstanceMethods	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	    module InstanceMethods
+InstanceMethods	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	    module InstanceMethods 
+InstanceMethods	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	    module InstanceMethods 
 Railtie	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/railtie.rb	  class Railtie 
 Whodunnit	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/whodunnit.rb	  module Whodunnit
-acts_as_change_logger	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	      def acts_as_change_logger
-acts_as_change_logger	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	      def acts_as_change_logger
+acts_as_change_logger	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	      def acts_as_change_logger(options = {})
+acts_as_change_logger	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	      def acts_as_change_logger(options = {})
 change_logger_store	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger.rb	  def self.change_logger_store
 copy_migration	/home/dan/workspace/rails3/gems/change_logger/lib/generators/change_logger_generator.rb	  def copy_migration
 copy_migration	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/generators/change_logger_generator.rb	  def copy_migration
-create_change_log	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	      def create_change_log
-create_change_log	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	      def create_change_log
-delete_records	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	  alias_method :delete_records
-delete_records	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	  alias_method :delete_records
-delete_records_with_change_log	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	  def delete_records_with_change_log
-delete_records_with_change_log	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	  def delete_records_with_change_log
-delete_records_without_change_log	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	  alias_method :delete_records_without_change_log
-delete_records_without_change_log	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	  alias_method :delete_records_without_change_log
+create_change_log	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	      def create_change_log(attribute_name, old_val, new_val, whodunnit_id)
+create_change_log	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	      def create_change_log(attribute_name, old_val, new_val, whodunnit_id)
+delete_records_with_record_changes	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	  def delete_records_with_record_changes(records)
+delete_records_with_record_changes	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	  def delete_records_with_record_changes(records)
 down	/home/dan/workspace/rails3/gems/change_logger/lib/generators/templates/create_change_logs.rb	  def self.down
 ignore	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	        cattr_accessor :ignore
 ignore	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	        cattr_accessor :ignore
-included	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	    def self.included
+included	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	    def self.included(base)
 included	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/whodunnit.rb	    def self.included
-included	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	    def self.included
-insert_record	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	  alias_method :insert_record
-insert_record	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	  alias_method :insert_record
-insert_with_change_log	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	  def insert_with_change_log
-insert_with_change_log	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	  def insert_with_change_log
-insert_without_change_log	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	  alias_method :insert_without_change_log
-insert_without_change_log	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	  alias_method :insert_without_change_log
-record_association	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	      def record_association
-record_association	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	      def record_association
-record_association_delete	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	      def record_association_delete
-record_association_delete	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	      def record_association_delete
+included	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	    def self.included(base)
+insert_record_with_record_changes	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	  def insert_record_with_record_changes(record, force = true, validate = true)
+insert_record_with_record_changes	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	  def insert_record_with_record_changes(record, force = true, validate = true)
+record_association	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	      def record_association(record, action)
+record_association	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	      def record_association(record, action)
 record_changes	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	      def record_changes
 record_changes	/home/dan/workspace/rails3/gems/change_logger/pkg/change_logger-0.0.1/lib/change_logger/acts_as_change_logger.rb	      def record_changes
 record_destroy	/home/dan/workspace/rails3/gems/change_logger/lib/change_logger/acts_as_change_logger.rb	      def record_destroy

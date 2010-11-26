@@ -1,15 +1,14 @@
 module ChangeLogger
   module ActsAsChangeLogger
+    ACTIONS = {
+      :create => 'CREATED',
+      :delete => 'DELETED'
+    }
     def self.included(base)
       base.send :extend, ChangeLogger::ActsAsChangeLogger::ClassMethods
     end
     
     module ClassMethods
-      # def has_many(association_id, options = {}, &extension)
-        # puts "!!This is the has many change_logger method"
-        # super(association_id, options, &extension)
-        # puts "!!this is after"
-      # end
       def acts_as_change_logger(options = {})
         send :include, InstanceMethods
         cattr_accessor :ignore
@@ -20,10 +19,9 @@ module ChangeLogger
         after_save :record_changes
         after_destroy :record_destroy
       end
-
     end
     
-    module InstanceMethods
+    module InstanceMethods      
       def record_changes
         attributes.delete_if{|k,v| self.class.ignore.include?(k) }.each do |key, value|
           if send("#{key}_changed?")
@@ -34,18 +32,17 @@ module ChangeLogger
       
       def record_destroy
         attributes.delete_if{|k,v| self.class.ignore.include?(k) }.each do |key, value|
-          create_change_log(key, send("#{key}_was"), "DELETED", ::ChangeLogger.whodunnit.id)
+          create_change_log(key, send("#{key}_was"), ACTIONS[:delete], ::ChangeLogger.whodunnit.id)
         end
       end
       
-      def record_association(record)
-        create_change_log(record.class.to_s, 'CREATE', record.id, ::ChangeLogger.whodunnit.id)
-      end
-      
-      def record_association_delete(records)
-        records.each_with_index do |record,index|
-          create_change_log(record.class.to_s, record.id, 'DELETED', ::ChangeLogger.whodunnit.id)
+      def record_association(record, action)
+        if action == ACTIONS[:delete]
+          old_val, new_val = record.id, action
+        else
+          old_val, new_val = action, record.id
         end
+        create_change_log(record.class.to_s, old_val, new_val, ::ChangeLogger.whodunnit.id)
       end
       
       private
@@ -64,23 +61,23 @@ end
 ActiveRecord::Base.send :include, ChangeLogger::ActsAsChangeLogger
 
 ActiveRecord::Associations::HasAndBelongsToManyAssociation.class_eval do |a|
-  def insert_with_change_log(record, force = true, validate = true)
-    insert_without_change_log(record, force, validate)
+  def insert_record_with_record_changes(record, force = true, validate = true)
+    insert_record_without_record_changes(record, force, validate)
     if @owner.respond_to? :record_association
-      @owner.record_association(record)
+      @owner.record_association(record, ChangeLogger::ActsAsChangeLogger::ACTIONS[:create])
     end
   end
-  alias_method :insert_without_change_log, :insert_record
-  alias_method :insert_record, :insert_with_change_log
+  alias_method_chain :insert_record, :record_changes
   
-  def delete_records_with_change_log(records)
-    delete_records_without_change_log(records)
-    if @owner.respond_to? :record_association_delete
-      @owner.record_association_delete(records)
+  def delete_records_with_record_changes(records)
+    delete_records_without_record_changes(records)
+    if @owner.respond_to? :record_association
+      records.each do |record|
+        @owner.record_association(record, ChangeLogger::ActsAsChangeLogger::ACTIONS[:delete])
+      end
     end
   end
-  alias_method :delete_records_without_change_log, :delete_records
-  alias_method :delete_records, :delete_records_with_change_log
+  alias_method_chain :delete_records, :record_changes
 end
 
 
