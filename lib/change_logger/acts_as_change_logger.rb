@@ -64,7 +64,7 @@ ActiveRecord::Associations::HasAndBelongsToManyAssociation.class_eval do |a|
   def insert_record_with_record_changes(record, force = true, validate = true)
     insert_record_without_record_changes(record, force, validate)
     if @owner.respond_to? :record_association
-      @owner.record_association(record, ChangeLogger::ActsAsChangeLogger::ACTIONS[:create])
+      @owner.record_association(record, ::ChangeLogger::ActsAsChangeLogger::ACTIONS[:create])
     end
   end
   alias_method_chain :insert_record, :record_changes
