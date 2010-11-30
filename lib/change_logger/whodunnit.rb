@@ -2,7 +2,7 @@ module ChangeLogger
   module Whodunnit
     
     def self.included(base)
-      base.before_filter :set_change_logger_whodunnit
+      base.before_filter :set_whodunnit
     end
     
     protected
@@ -13,9 +13,15 @@ module ChangeLogger
     
     private
     
-    def set_change_logger_whodunnit
+    def set_whodunnit
       ::ChangeLogger.whodunnit = whodunnit
     end
   end
 end
-ActionController::Base.send :include, ChangeLogger::Whodunnit
+ActionController::Base.send :include, ::ChangeLogger::Whodunnit
+
+Kernel.module_eval do
+  def whodunnit
+    ::ChangeLogger.whodunnit
+  end
+end

@@ -1,7 +1,7 @@
-require 'change_logger'
+# require 'change_logger'
 
-module ChangeLogger
-  class Railtie < Rails::Railtie
+# module ChangeLogger
+  # class Railtie < Rails::Railtie
     
-  end
-end
+  # end
+# end
