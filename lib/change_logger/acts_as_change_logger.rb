@@ -20,7 +20,7 @@ module ChangeLogger
         after_destroy :record_object_destruction
         self.reflect_on_all_associations(:has_and_belongs_to_many).each do |reflection|
           if reflection.options.keys.include?(:after_add) || reflection.options.keys.include?(:before_add)
-            logger.warn { "WARNING: change_logger gem adds after_add and after_remove option to has_and_belongs_to_many relationships. Please create a method to encapsulate both methods and be sure to call record_association_add(object) or record_association_remove(object) for change_logger to properly track changes to those relationships." }
+            logger.warn { "WARNING: change_logger adds after_add and after_remove options to has_and_belongs_to_many relationships. You need to combine your current methods with the record_association_* methods in order for change_logger to work correctly." }
           end
           new_options = { :after_add => :record_association_add, :after_remove => :record_association_remove }.merge(reflection.options)
           has_and_belongs_to_many reflection.name.to_sym, new_options
@@ -29,6 +29,7 @@ module ChangeLogger
     end
     
     module InstanceMethods
+      
       def record_association_add(object)
         record_change(object.class.to_s, ACTIONS[:create], object.id)
       end
@@ -38,10 +39,8 @@ module ChangeLogger
       end
       
       def record_attribute_updates
-        attributes.delete_if{|k,v| self.class.ignore.include?(k) }.each do |key, value|
-          if send("#{key}_changed?")
-            record_change(key, old_value(key), send(key))
-          end
+        self.changes.delete_if { |k,v| self.class.ignore.include?(k) }.each do |key, value|
+          record_change(key, value[0], value[1])
         end
       end
 
