@@ -13,7 +13,7 @@ module ChangeLogger
         send :include, InstanceMethods
         cattr_accessor :ignore
         self.ignore = (options[:ignore] || []).map &:to_s
-        self.ignore.push('created_at', 'updated_at')
+        self.ignore.push('id', 'created_at', 'updated_at')
         
         has_many :change_logs, :as => :item, :order => 'change_logs.created_at desc'
         after_save :record_attribute_updates
@@ -31,7 +31,6 @@ module ChangeLogger
     module InstanceMethods
       
       def record_association_add(object)
-        puts "****: record_association_add object: #{object.inspect}"
         record_change(object.class.to_s, ACTIONS[:create], object.id)
       end
       
@@ -40,26 +39,22 @@ module ChangeLogger
       end
       
       def record_attribute_updates
-        self.changes.delete_if { |k,v| self.class.ignore.include?(k) }.each do |key, value|
+        self.changes.delete_if { |k,v| self.class.ignore.include?(k) }.each do |key, value|          
           record_change(key, value[0], value[1])
         end
       end
 
       def record_object_destruction
         attributes.each do |key, value|
-          record_change(key, old_value(key), ACTIONS[:delete])
+          record_change(key, old_value(value), ACTIONS[:delete])
         end
       end
       
       private
-      
-      def old_value(attribute)
-        if self.new_record?
-          ACTIONS[:create]
-        else
-          send("#{key}_was")
-        end
-      end
+
+      def old_value(val)
+        self.new_record? ? ACTIONS[:create] : val
+      end      
       
       def record_change(attribute_name, old_val, new_val)
         self.change_logs.create!(
