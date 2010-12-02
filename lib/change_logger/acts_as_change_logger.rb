@@ -18,11 +18,12 @@ module ChangeLogger
         has_many :change_logs, :as => :item, :order => 'change_logs.created_at desc'
         after_save :record_attribute_updates
         after_destroy :record_object_destruction
-        self.class.reflections.each do |reflection|
-          if reflection[:macro] == :has_and_belongs_to_many
-            reflection.options.merge!({ :after_add => :record_association_add })
-            reflection.options.merge!({ :after_remove => :record_association_remove })
+        self.reflect_on_all_associations(:has_and_belongs_to_many).each do |reflection|
+          if reflection.options.keys.include?(:after_add) || reflection.options.keys.include?(:before_add)
+            logger.warn { "WARNING: change_logger gem adds after_add and after_remove option to has_and_belongs_to_many relationships. Please create a method to encapsulate both methods and be sure to call record_association_add(object) or record_association_remove(object) for change_logger to properly track changes to those relationships." }
           end
+          new_options = { :after_add => :record_association_add, :after_remove => :record_association_remove }.merge(reflection.options)
+          has_and_belongs_to_many reflection.name.to_sym, new_options
         end
       end
     end
@@ -33,7 +34,7 @@ module ChangeLogger
       end
       
       def record_association_remove(object)
-        record_change(oject.class.to_s, object.id, ACTIONS[:delete])
+        record_change(object.class.to_s, object.id, ACTIONS[:delete])
       end
       
       def record_attribute_updates

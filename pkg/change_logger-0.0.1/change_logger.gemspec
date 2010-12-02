@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dan Engle"]
   s.cert_chain = ["/Users/danengle/.ssh/gem-public_cert.pem"]
-  s.date = %q{2010-11-29}
+  s.date = %q{2010-12-01}
   s.description = %q{A gem for tracking who and what changes}
   s.email = %q{engle.68 @nospam@ gmail.com}
   s.extra_rdoc_files = ["CHANGELOG", "README", "lib/app/models/change_log.rb", "lib/change_logger.rb", "lib/change_logger/acts_as_change_logger.rb", "lib/change_logger/railtie.rb", "lib/change_logger/whodunnit.rb", "lib/generators/change_logger_generator.rb", "lib/generators/templates/create_change_logs.rb"]
