@@ -19,11 +19,11 @@ module ChangeLogger
         after_save :record_attribute_updates
         after_destroy :record_object_destruction
         self.reflect_on_all_associations(:has_and_belongs_to_many).each do |reflection|
-          if reflection.options.include?(:after_add) || reflection.options.include?(:before_add)
-            logger.warn { "WARNING: change_logger adds after_add and after_remove options. You need to combine your current methods with the record_association_* methods in order for change_logger to work correctly." }
+          if reflection.options.keys.include?(:after_add) || reflection.options.keys.include?(:before_add)
+            logger.warn { "WARNING: change_logger adds after_add and after_remove options to has_and_belongs_to_many relationships. You need to combine your current methods with the record_association_* methods in order for change_logger to work correctly." }
           end
           new_options = { :after_add => :record_association_add, :after_remove => :record_association_remove }.merge(reflection.options)
-          has_and_belongs_to_many reflection.name.to_sym, new_options          
+          has_and_belongs_to_many reflection.name.to_sym, new_options
         end
       end
     end
