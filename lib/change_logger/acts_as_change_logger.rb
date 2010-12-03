@@ -16,7 +16,8 @@ module ChangeLogger
         self.ignore.push('id', 'created_at', 'updated_at')
         
         has_many :change_logs, :as => :item, :order => 'change_logs.created_at desc'
-        after_save :record_attribute_updates
+        after_create :record_object_creation
+        after_update :record_attribute_updates
         after_destroy :record_object_destruction
         self.reflect_on_all_associations(:has_and_belongs_to_many).each do |reflection|
           if reflection.options.keys.include?(:after_add) || reflection.options.keys.include?(:before_add)
@@ -31,33 +32,39 @@ module ChangeLogger
     module InstanceMethods
       
       def record_association_add(object)
-        record_change(object.class.to_s, ACTIONS[:create], object.id)
+        record_change(object.class.to_s, ACTIONS[:create], object.id) if self.persisted?
       end
       
       def record_association_remove(object)
-        record_change(object.class.to_s, object.id, ACTIONS[:delete])
+        record_change(object.class.to_s, object.id, ACTIONS[:delete]) if self.persisted?
+      end
+      
+      def record_object_creation
+        attributes.delete_if {|k,v| self.class.ignore.include?(k) }.each do |key, value|
+          record_change(key, ACTIONS[:create], value) unless value.blank?
+        end        
       end
       
       def record_attribute_updates
-        self.changes.delete_if { |k,v| self.class.ignore.include?(k) }.each do |key, value|          
+        changes_to_track.each do |key, value|
           record_change(key, value[0], value[1])
-        end
+        end        
       end
 
       def record_object_destruction
         attributes.each do |key, value|
-          record_change(key, old_value(value), ACTIONS[:delete])
+          record_change(key, value, ACTIONS[:delete])
         end
       end
       
       private
 
-      def old_value(val)
-        self.new_record? ? ACTIONS[:create] : val
-      end      
-      
-      def record_change(attribute_name, old_val, new_val)
-        self.change_logs.create!(
+      def changes_to_track
+        (new_record? ? attributes : changes).delete_if {|k,v| self.class.ignore.include?(k) }
+      end
+
+      def record_change(attribute_name, old_val, new_val)        
+        self.change_logs.create(
           :attribute_name => attribute_name,
           :old_value => old_val,
           :new_value => new_val,

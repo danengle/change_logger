@@ -1,5 +1,6 @@
 CHANGELOG
 MIT-LICENSE
+Manifest
 README
 Rakefile
 lib/app/models/change_log.rb
@@ -9,4 +10,3 @@ lib/change_logger/railtie.rb
 lib/change_logger/whodunnit.rb
 lib/generators/change_logger_generator.rb
 lib/generators/templates/create_change_logs.rb
-Manifest
