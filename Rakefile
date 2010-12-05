@@ -4,7 +4,7 @@ require 'rake'
 require 'echoe'
 require 'env'
 
-Echoe.new('change_logger', '0.0.2') do |p|
+Echoe.new('change_logger', '0.0.3') do |p|
   p.description = "A gem for tracking what changes and who did it"
   p.url = "http://github.com/danengle/awesome_tables"
   p.author = "Dan Engle"
