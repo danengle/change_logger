@@ -18,7 +18,7 @@ module ChangeLogger
         has_many :change_logs, :as => :item, :order => 'change_logs.created_at desc'
         after_create :record_object_creation
         after_update :record_attribute_updates
-        after_destroy :record_object_destruction
+        before_destroy :record_object_destruction
         self.reflect_on_all_associations(:has_and_belongs_to_many).each do |reflection|
           if reflection.options.keys.include?(:after_add) || reflection.options.keys.include?(:before_add)
             logger.warn { "WARNING: change_logger adds after_add and after_remove options to has_and_belongs_to_many relationships. You need to combine your current methods with the record_association_* methods in order for change_logger to work correctly." }
@@ -56,13 +56,13 @@ module ChangeLogger
           record_change(key, value, ACTIONS[:delete])
         end
       end
-      
-      private
 
       def changes_to_track
         (new_record? ? attributes : changes).delete_if {|k,v| self.class.ignore.include?(k) }
       end
-
+      
+      private
+      
       def record_change(attribute_name, old_val, new_val)        
         self.change_logs.create(
           :attribute_name => attribute_name,

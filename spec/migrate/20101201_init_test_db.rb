@@ -11,6 +11,7 @@ class InitTestDb < ActiveRecord::Migration
     create_table :permissions_users, :id => false do |t|
       t.integer :permission_id, :user_id, :null => false
     end
+    # the create_table below needs to be removed and the one stored in lib/generators/templates/create_change_log should be used
     create_table :change_logs do |t|
       t.integer :item_id, :null => false
       t.string :item_type, :null => false
