@@ -68,7 +68,7 @@ module ChangeLogger
           :attribute_name => attribute_name,
           :old_value => old_val,
           :new_value => new_val,
-          :changed_by_id => whodunnit.id
+          :changed_by => whodunnit
         )
       end
     end
