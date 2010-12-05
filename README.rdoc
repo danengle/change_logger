@@ -19,10 +19,10 @@ In any model that you want to track changes, add acts_as_change_logger below all
 
   class User < ActiveRecord::Base
     has_many :things
-		has_and_belongs_to_many :permissions
+    has_and_belongs_to_many :permissions
 		
-		acts_as_change_logger :ignore => [:crypted_password, :password_salt]
-	end
+    acts_as_change_logger :ignore => [:crypted_password, :password_salt]
+  end
 	
 == Notes on tests
 
