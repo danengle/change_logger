@@ -3,6 +3,11 @@ MIT-LICENSE
 Manifest
 README
 Rakefile
+cucumber.yml.bac
+features/log_changes.feature
+features/step_definitions/log_changes_steps.rb
+features/support/env.rb
+features/support/hooks.rb
 lib/app/models/change_log.rb
 lib/change_logger.rb
 lib/change_logger/acts_as_change_logger.rb
@@ -10,3 +15,7 @@ lib/change_logger/railtie.rb
 lib/change_logger/whodunnit.rb
 lib/generators/change_logger_generator.rb
 lib/generators/templates/create_change_logs.rb
+spec/factories.rb
+spec/migrate/20101201_init_test_db.rb
+spec/models/permission.rb
+spec/models/user.rb

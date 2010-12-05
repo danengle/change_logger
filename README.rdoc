@@ -1,0 +1,29 @@
+= change_logger
+
+change_logger is based off of https://github.com/airblade/paper_trail. Instead of storing the whole updated object in a text column, it creates a record for each changed value. Not sure if it's a better way of tracking changes, but it's how I wanted the changes stored.
+
+== Download
+
+Github: http://github.com/danengle/change_logger
+
+Gem:
+	gem install change_logger
+	
+== Usage
+
+Run the generator to create the migration
+  rails g change_logger
+  rake db:migrate
+
+In any model that you want to track changes, add acts_as_change_logger below all of the association declarations so that it can properly hook into any has_and_belongs_to_many associations. Use the ignore option to not save changes for certain attributes.
+
+  class User < ActiveRecord::Base
+    has_many :things
+		has_and_belongs_to_many :permissions
+		
+		acts_as_change_logger :ignore => [:crypted_password, :password_salt]
+	end
+	
+== Notes on tests
+
+There are cucumber stories that pass, but I don't seem to be using them quite how they are supposed to be. It is testable completely outside of the rails environment, but seems to akwardly incorporate the parts needed to make suitable tests. If you're able to give me some pointers on how better to setup the tests, please do.
