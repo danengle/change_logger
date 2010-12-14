@@ -5,16 +5,10 @@ module ChangeLogger
       base.before_filter :set_whodunnit
     end
     
-    protected
-    
-    def whodunnit
-      current_user rescue nil
-    end
-    
     private
     
     def set_whodunnit
-      ::ChangeLogger.whodunnit = whodunnit
+      ::ChangeLogger.whodunnit = current_user.login rescue nil
     end
   end
 end
