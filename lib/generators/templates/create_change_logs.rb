@@ -5,6 +5,7 @@ class CreateChangeLogs < ActiveRecord::Migration
       t.string :item_type, :null => false
       t.string :attribute_name, :old_value, :new_value
       t.string :changed_by
+      t.integer :revision
       t.datetime :created_at
     end
     add_index :change_logs, [:item_type, :item_id]
