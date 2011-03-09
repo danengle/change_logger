@@ -1,7 +1,7 @@
 CHANGELOG
 MIT-LICENSE
 Manifest
-README
+README.rdoc
 Rakefile
 cucumber.yml.bac
 features/log_changes.feature
