@@ -11,20 +11,25 @@ module ChangeLogger
     module ClassMethods
       def acts_as_change_logger(options = {})
         send :include, InstanceMethods
-        cattr_accessor :ignore
+        cattr_accessor :ignore, :templates
         self.ignore = (options[:ignore] || []).map &:to_s
         self.ignore.push('id', 'created_at', 'updated_at')
+        
+        self.templates = (options[:track_templates] || []).map &:to_s
+        has_many :template_logs, :as => :item, :order => 'template_logs.created_at desc'
         
         has_many :change_logs, :as => :item, :order => 'change_logs.created_at desc'
         after_create :record_object_creation
         after_update :record_attribute_updates
         before_destroy :record_object_destruction
         self.reflect_on_all_associations(:has_and_belongs_to_many).each do |reflection|
-          if reflection.options.keys.include?(:after_add) || reflection.options.keys.include?(:before_add)
-            logger.warn { "WARNING: change_logger adds after_add and after_remove options to has_and_belongs_to_many relationships. You need to combine your current methods with the record_association_* methods in order for change_logger to work correctly." }
+          unless self.templates.include?(reflection.name.to_sym)
+            if reflection.options.keys.include?(:after_add) || reflection.options.keys.include?(:before_add)
+              logger.warn { "WARNING: change_logger adds after_add and after_remove options to has_and_belongs_to_many relationships. You need to combine your current methods with the record_association_* methods in order for change_logger to work correctly." }
+            end
+            new_options = { :after_add => :record_association_add, :after_remove => :record_association_remove }.merge(reflection.options)
+            has_and_belongs_to_many reflection.name.to_sym, new_options
           end
-          new_options = { :after_add => :record_association_add, :after_remove => :record_association_remove }.merge(reflection.options)
-          has_and_belongs_to_many reflection.name.to_sym, new_options
         end
       end
     end
