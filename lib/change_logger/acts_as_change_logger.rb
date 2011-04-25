@@ -27,7 +27,7 @@ module ChangeLogger
         after_update :record_attribute_updates
         before_destroy :record_object_destruction
         self.reflect_on_all_associations(:has_and_belongs_to_many).each do |reflection|
-          if reflection.options.keys.include?(:after_add) || reflection.options.keys.include?(:before_add)
+          if reflection.options.keys.include?(:after_add) || reflection.options.keys.include?(:after_remove)
             logger.warn { "WARNING: change_logger adds after_add and after_remove options to has_and_belongs_to_many relationships. You need to combine your current methods with the record_association_* methods in order for change_logger to work correctly." }
           end
           new_options = { :after_add => :record_association_add, :after_remove => :record_association_remove }.merge(reflection.options)
@@ -42,16 +42,21 @@ module ChangeLogger
         self.increment(:revision) if self.respond_to?(:revision)
       end
       
+      def record_template_update(association)
+        self.template_changed = {association.to_sym => true}
+      end
+      
       def record_template_change
-        self.template_changed = {} if self.template_changed.nil?
-        if self.template_changed.values.include?(true)
-          self.template_changed.keys.each do |relation|
-            record_change("#{relation}_template", ACTIONS[:update], self.send(relation).to_yaml)
-          end
+        return if self.template_changed.nil?
+        # FIXME hash isn't necessary for self.template_changed, convert to using hash or remove need
+        # for it altogether
+        self.template_changed.keys.each do |relation|
+          record_change("#{relation}_template", ACTIONS[:update], self.send(relation).to_yaml)
         end
       end
       
       def record_association_add(object)
+        # don't update individual adds if recording a template
         if self.class.track_templates.include?(object.class.to_s.tableize)
           self.template_changed = {} if self.template_changed.nil?
           self.template_changed[object.class.to_s.tableize.to_sym] = true          
@@ -77,6 +82,7 @@ module ChangeLogger
       
       def record_attribute_updates
         changes_to_track.each do |key, value|
+          ::ApplicationController::logger.info { "* #{key}, #{value[0]}, #{value[1]}"}
           record_change(key, value[0], value[1])
         end        
       end
